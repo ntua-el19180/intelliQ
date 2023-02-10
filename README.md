@@ -23,9 +23,9 @@ The goal of the project was to develop an application of smart questionnaires.
 **This project was a collaborate effort of a team of 3 members. Those members are:**
 
 | Name | ID
-| ----- 
-| Georgia Argyrou | el19046
-| Varvara Konstantina Maggelaki | el19180
+| ----- | -- |
+| Georgia Argyrou | el19046 |
+| Varvara Konstantina Maggelaki | el19180 |
 | Christos Skarlos | el19911
 
 
