@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import classes from './Participate.module.css';
-
+import Axios from "axios";
 function  ParticipatePage() {
   const [showMessage, setShowMessage] = useState(false);
   const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -8,37 +8,53 @@ function  ParticipatePage() {
 
   const questions = [
     {
-      text: "Do you like sports?",
+      text: "What is your age?",
+      options: [
+        { id: 0, text: "<30"},
+        { id: 1, text: "30-50" },
+        { id: 2, text: "50-70" },
+        { id: 3, text: ">70" },
+      ],
+    },
+    {
+      text: "What is your marital status?",
+      options: [
+        { id: 0, text: "Married"},
+        { id: 1, text: "Single"},
+        { id: 2, text: "Widowed" },
+        { id: 3, text: "Divorced"},
+      ],
+    },
+    {
+      text: "What is the main current source of income of the household?",
+      options: [
+        { id: 0, text: "No income"},
+        { id: 1, text: "Casual labor"},
+        { id: 2, text: "Permanent job"},
+        { id: 3, text: "Other"},
+      ],
+    },
+    {
+      text: "Do you have any children living with you?",
       options: [
         { id: 0, text: "Yes"},
-        { id: 1, text: "No" },
+        { id: 1, text: "No"},
       ],
     },
     {
-      text: "What sport do you prefer?",
+      text: "How old are they?",
       options: [
-        { id: 0, text: "Football"},
-        { id: 1, text: "Basketball"},
-        { id: 2, text: "Volleyball" },
-        { id: 3, text: "Karate"},
+        { id: 0, text: ">=6"},
+        { id: 1, text: "<6"},
       ],
     },
     {
-      text: "What team do you support?",
+      text: "Who takes care of them?",
       options: [
-        { id: 0, text: "Aek "},
-        { id: 1, text: "Paok"},
-        { id: 2, text: "Olympiakos"},
-        { id: 3, text: "Panathinaikos"},
-      ],
-    },
-    {
-      text: "How many hours do you play sports per week?",
-      options: [
-        { id: 0, text: "0-2"},
-        { id: 1, text: "3-5"},
-        { id: 2, text: "5-8"},
-        { id: 3, text: "More"},
+        { id: 0, text: "Parents"},
+        { id: 1, text: "Mother"},
+        { id: 2, text: "Father"},
+        { id: 3, text: "Other"},
       ],
     },
   ];
@@ -56,6 +72,14 @@ function  ParticipatePage() {
     }
   };
 
+
+  const [questionnaireTitlesList, setQuestionnaireTitlesList] = useState([]);
+  const getQuestionnairesTitles = () => {
+    Axios.get('http://localhost:9103/get_questionnaireTitle', {
+  }).then((response)=>{
+      setQuestionnaireTitlesList(response.data)
+  });
+  };
   /* Resets the game back to default */
   const restartGame = () => {
     
@@ -65,8 +89,14 @@ function  ParticipatePage() {
 
   return (
     <div className="App">
-      {/* 1. Header  */}
-      <h1>Sports survey</h1>
+      {getQuestionnairesTitles}
+      {questionnaireTitlesList.map((val,key) =>{
+        
+        return <div className={classes.list}> 
+          <div className={classes.title1}> {val.questionnaireTitle} </div>
+          </div>
+     })}
+      <h1> {questionnaireTitlesList} </h1>
 
      
 
