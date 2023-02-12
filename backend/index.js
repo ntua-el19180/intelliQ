@@ -26,9 +26,9 @@ app.use(
 app.get("/", (req, res) => {
   res.json({ message: "ok" });
 });
-app.use("/questions", questionsRouter);
-app.use("/healthcheck", healthcheckRouter);
-app.use("/questionnaire_upd", questionnareupdRouter);
+app.use("/intelliq_api/questions", questionsRouter);
+app.use("/intelliq_api/healthcheck", healthcheckRouter);
+app.use("/intelliq_api/questionnaire_upd", questionnareupdRouter);
 
 /* frontend apis */
 app.post("/create_questions", (req,res) => {
@@ -60,7 +60,19 @@ app.get('/get_questionnaires', (req,res) => {
     res.send(result);
   }
 })
-});
+}); 
+
+app.get('/get_questionnaireTitle', (req,res) => {
+
+  con.query('SELECT questionnaire.questionnaireTitle FROM questionnaire' , 
+  (err,result) => {
+    if (err){
+    console.log(err);
+  } else{
+    res.send(result);
+  }
+})
+}); 
 
 app.post("/create_answer", (req,res) => {
   const opttxt = req.body.opttxt;
@@ -98,7 +110,7 @@ app.post("/create_questionnaire", (req,res) => {
 /* end of frontent apis */
 
 
-app.post('/resetall', (req, res) => {
+app.post('/intelliq_api/resetall', (req, res) => {
   //const delid = req.params.id;
   con.query('SET FOREIGN_KEY_CHECKS=0;TRUNCATE TABLE creator;TRUNCATE TABLE options;TRUNCATE TABLE participants;TRUNCATE TABLE questionnaire;TRUNCATE TABLE questionnaireparticipant;TRUNCATE TABLE questions;', (err, result) =>{
       if(err)
@@ -113,7 +125,7 @@ app.post('/resetall', (req, res) => {
 })
 
 
-app.post('/resetq/:id', (req, res) => {
+app.post('/intelliq_api/resetq/:id', (req, res) => {
   const delid = req.params.id;
   con.query('delete from options where questionnaireID = ?', delid, (err, result) =>{
       if(err)
@@ -127,7 +139,7 @@ app.post('/resetq/:id', (req, res) => {
   })
 })
 
-app.post('/resetq1/:id', (req, res) => {
+app.post('/intelliq_api/resetq1/:id', (req, res) => {
   const delid = req.params.id;
   con.query('Update options set participant_id = NULL where questionnaireID = ?', delid, (err, result) =>{
       if(err)
@@ -141,7 +153,7 @@ app.post('/resetq1/:id', (req, res) => {
   })
 })
 
-app.get('/question/:questionnaireID/:questionID', (req, res) => {
+app.get('/intelliq_api/question/:questionnaireID/:questionID', (req, res) => {
   const question_id = req.params.questionID;
   const questionnaire_id = req.params.questionnaireID;
   con.query('SELECT questionnaire.questionnaireID, questions.qID, questions.qtext, questions.required, questions.type, options.optID, options.opttxt, options.nextqID FROM questionnaire inner join questions on questions.questionnaireID = questionnaire.questionnaireID inner join options on options.qID = questions.qID where options.qID = ? and questionnaire.questionnaireID = ?', [question_id, questionnaire_id], function(err, result){
@@ -154,7 +166,7 @@ app.get('/question/:questionnaireID/:questionID', (req, res) => {
   })
 })
 
-app.get('/questionnaire/:questionnaireID', (req, res) => {
+app.get('/intelliq_api/questionnaire/:questionnaireID', (req, res) => {
 
   const questionnaire_id = req.params.questionnaireID;
   con.query('SELECT questionnaire.questionnaireID, questions.qID, questions.qtext, questions.required, questions.type, options.optID, options.opttxt, options.nextqID FROM questionnaire inner join questions on questions.questionnaireID = questionnaire.questionnaireID inner join options on options.qID = questions.qID where questionnaire.questionnaireID = ?',  questionnaire_id, function(err, result){
@@ -167,7 +179,7 @@ app.get('/questionnaire/:questionnaireID', (req, res) => {
   })
 })
 
-app.post('/doanswer/:questionnaireID/:questionID/:session/:optionID', (req, res) => {
+app.post('/intelliq_api/doanswer/:questionnaireID/:questionID/:session/:optionID', (req, res) => {
   const question_id = req.params.questionID;
   const questionnaire_id = req.params.questionnaireID;
   const session_id = req.params.session;
@@ -183,7 +195,7 @@ app.post('/doanswer/:questionnaireID/:questionID/:session/:optionID', (req, res)
 })
 
 
-app.get('/getsessionanswers/:questionnaireID/:session', (req, res) => {
+app.get('/intelliq_api/getsessionanswers/:questionnaireID/:session', (req, res) => {
   const session_id = req.params.session;
   const questionnaire_id = req.params.questionnaireID;
   con.query('SELECT answers.questionnaireID, answers.session, answers.qID, answers.optID as ans FROM answers where answers.questionnaireID = ? and answers.session = ?', [questionnaire_id, session_id], function(err, result){
@@ -196,7 +208,7 @@ app.get('/getsessionanswers/:questionnaireID/:session', (req, res) => {
   })
 })
 
-app.get('/getquestionanswers/:questionnaireID/:questionID', (req, res) => {
+app.get('/intelliq_api/getquestionanswers/:questionnaireID/:questionID', (req, res) => {
   const question_id = req.params.questionID;
   const questionnaire_id = req.params.questionnaireID;
   con.query('SELECT answers.questionnaireID, answers.qID, answers.session, answers.optID as ans FROM answers where answers.questionnaireID = ? and answers.qID = ?', [questionnaire_id, question_id], function(err, result){
