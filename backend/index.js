@@ -127,7 +127,7 @@ app.post('/intelliq_api/resetall', (req, res) => {
 
 app.post('/intelliq_api/resetq/:id', (req, res) => {
   const delid = req.params.id;
-  con.query('delete from options where questionnaireID = ?', delid, (err, result) =>{
+  con.query('delete from answers where questionnaireID = ?', delid, (err, result) =>{
       if(err)
   {
       res.json({"status":"failed", "reason":"failed to delete options"})
