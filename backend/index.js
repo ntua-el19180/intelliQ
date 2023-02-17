@@ -112,7 +112,7 @@ app.post("/create_questionnaire", (req,res) => {
 
 app.post('/intelliq_api/resetall', (req, res) => {
   //const delid = req.params.id;
-  con.query('SET FOREIGN_KEY_CHECKS=0;TRUNCATE TABLE creator;TRUNCATE TABLE options;TRUNCATE TABLE participants;TRUNCATE TABLE questionnaire;TRUNCATE TABLE questionnaireparticipant;TRUNCATE TABLE questions;', (err, result) =>{
+  con.query('SET FOREIGN_KEY_CHECKS=0;TRUNCATE TABLE creator;TRUNCATE TABLE options;TRUNCATE TABLE answers;TRUNCATE TABLE participants;TRUNCATE TABLE questionnaire;TRUNCATE TABLE questionnaireparticipant;TRUNCATE TABLE questions;', (err, result) =>{
       if(err)
   {
       res.json({"status":"failed", "reason":"failed to truncate tables"})
